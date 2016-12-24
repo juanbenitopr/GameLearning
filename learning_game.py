@@ -1,19 +1,15 @@
 import json
 import pickle
 import numpy as np
-import sklearn
-from sklearn import preprocessing
-from sklearn.grid_search import GridSearchCV
-from sklearn.svm.classes import SVR, NuSVR
+from sklearn.svm.classes import SVR
 
 
 def load_model():
+    # Save training samples to json file
     file = open(r'C:\\Users\\juanb\\PycharmProjects\\GameLearning\\myfile.json', 'r')
     datas = json.load(file)
-    param_grid = [
-        {'C': [1, 10, 100, 1000], 'kernel': ['linear']},
-        {'C': [1, 10, 100, 1000], 'gamma': [0.001, 0.0001,0.01], 'kernel': ['rbf']},
-    ]
+    # Create model object to train and predict new values
+    # You can try to change this estimator and look what is the difference.
     clp = SVR(C=100,gamma=0.001)
     get_X = datas.get('X')
     get_Y = datas.get('Y')
@@ -24,5 +20,5 @@ def load_model():
 if __name__=="__main__":
     X,Y,clp = load_model()
     clp.fit(X,Y)
-    tz = clp.predict(X)
+    # Save our trained estimator into pickle file, to recover later.
     pickle.dump(clp,open('C:\\Users\\juanb\\PycharmProjects\\GameLearning\\clp.pickle', 'wb'))
