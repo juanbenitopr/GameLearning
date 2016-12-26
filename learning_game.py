@@ -15,7 +15,7 @@ def load_model():
     datas = json.load(file)
     # Create model object to train and predict new values
     # You can try to change this estimator and look what is the difference.
-    clp = SVR(C=100,gamma=0.001)
+    clp = SVR(C=10,gamma=0.001)
     get_X = datas.get('X')
     get_Y = datas.get('Y')
     X = np.array(get_X)

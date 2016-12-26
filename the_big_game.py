@@ -1,9 +1,7 @@
 import pickle
 import numpy as np
 from tkinter import *
-from tkinter import ttk
 
-from learning_game import load_model
 
 class GameRound():
     def __init__(self):
@@ -83,40 +81,11 @@ def get_awards():
 
 def get_stop_round():
     stop = int(np.random.random_sample() * 15 + 1)
-    return stop-1
-
-def play_one_hundred_times():
-    results = np.zeros(100)
-    max_result = np.zeros(100)
-    round_stop_log = []
-    count = 0
-    for i in range(100):
-        awards = get_awards()
-        predicted = clp.predict(awards.reshape(1,-1))
-        fail = get_stop_round()
-        round_stop = int(round(predicted[0]))
-        round_stop_log.append(round_stop)
-        if round_stop <= fail:
-            results[count] = np.sum(awards[0:round_stop])
-        max_result[count] = np.sum(awards[0:fail])
-        count+=1
-    for i in range(100):
-        print (str(round_stop_log[i])+" "+str(results[i])+" "+str(max_result[i]))
+    return stop
 
 
-def next_round(round_n):
-    round_n += 1
-    round.set(round_n)
-
-
-if __name__ == "__main__":
-    # x,y,clp = load_model()
-    # clp.fit(x, y)
-    game = GameRound()
-
-    root = Tk()
-    root.title("Play Game!")
-
+def start_variables_gui():
+    global round_label, awards_label, results_label, results_machine_label, final_award_label, max_result_label
     round_label = StringVar()
     awards_label = StringVar()
     results_label = StringVar()
@@ -124,29 +93,45 @@ if __name__ == "__main__":
     final_award_label = StringVar()
     max_result_label = StringVar()
 
+
+def set_variables_gui():
     results_label.set(game.results)
     awards_label.set(game.get_award_round())
-    round_label.set(str(game.get_round())+"/16")
+    round_label.set(str(game.get_round()) + "/16")
     final_award_label.set(game.get_final_award())
 
-    next_button = Button(command=game.next_round,text="Next Round")
+
+def create_buttons():
+    global next_button, stop_button
+    next_button = Button(command=game.next_round, text="Next Round")
+    stop_button = Button(command=game.stop_game, text="Stop Game")
+    Button(command=game.restart, text="New Game").grid(row=1, column=2)
     next_button.grid(row=1)
-    stop_button = Button(command=game.stop_game,text="Stop Game")
-    stop_button.grid(row=1,column=1)
-    Button(command=game.restart,text="New Game").grid(row=1,column=2)
+    stop_button.grid(row=1, column=1)
 
-    Label(root, text = "Round").grid(row=0,column=0)
-    Label(root, text = "Total Award:").grid(row=0,column=2)
-    Label(root, textvariable = round_label).grid(row=0,column=1)
-    Label(root, textvariable = final_award_label).grid(row=0,column=3)
 
-    Label(root, text = "Award this round").grid(row=2,column=0)
-    Label(root, textvariable = awards_label).grid(row=2,column=1)
-    Label(root, text = "Results").grid(row=3,column=0)
-    Label(root, textvariable = results_label).grid(row=3,column=1)
-    Label(root, text="Machine Win this:").grid(row=4,column=0)
-    Label(root,textvariable=results_machine_label).grid(row=4,column=1)
-    Label(root, text="Max Result").grid(row=5,column=0)
-    Label(root,textvariable=max_result_label).grid(row=5,column=1)
+def create_labels():
+    Label(root, text="Round").grid(row=0, column=0)
+    Label(root, text="Total Award:").grid(row=0, column=2)
+    Label(root, textvariable=round_label).grid(row=0, column=1)
+    Label(root, textvariable=final_award_label).grid(row=0, column=3)
+    Label(root, text="Award this round").grid(row=2, column=0)
+    Label(root, textvariable=awards_label).grid(row=2, column=1)
+    Label(root, text="Results").grid(row=3, column=0)
+    Label(root, textvariable=results_label).grid(row=3, column=1)
+    Label(root, text="Machine Win this:").grid(row=4, column=0)
+    Label(root, textvariable=results_machine_label).grid(row=4, column=1)
+    Label(root, text="Max Result").grid(row=5, column=0)
+    Label(root, textvariable=max_result_label).grid(row=5, column=1)
+
+
+if __name__ == "__main__":
+    game = GameRound()
+    root = Tk()
+    root.title("Play Game!")
+    start_variables_gui()
+    set_variables_gui()
+    create_buttons()
+    create_labels()
     root.mainloop()
 
