@@ -2,11 +2,16 @@ import json
 import pickle
 import numpy as np
 from sklearn.svm.classes import SVR
+import os
 
+dir_path = os.path.dirname(os.path.realpath(__file__))
+windows_path = os.path.dirname(os.path.realpath(__file__))+'\\myfile.json'
+unix_path = os.path.dirname(os.path.realpath(__file__))+'/myfile.json'
 
 def load_model():
     # Save training samples to json file
-    file = open(r'C:\\Users\\juanb\\PycharmProjects\\GameLearning\\myfile.json', 'r')
+    file = open(windows_path, 'r') if os.name == 'nt' else  open(
+        unix_path, 'r')
     datas = json.load(file)
     # Create model object to train and predict new values
     # You can try to change this estimator and look what is the difference.

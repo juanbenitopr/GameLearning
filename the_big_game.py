@@ -115,7 +115,7 @@ if __name__ == "__main__":
     game = GameRound()
 
     root = Tk()
-    root.title("Feet to Meters")
+    root.title("Play Game!")
 
     round_label = StringVar()
     awards_label = StringVar()
