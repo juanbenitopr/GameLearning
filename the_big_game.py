@@ -19,26 +19,29 @@ class GameRound():
         return self.round
 
     def next_round(self):
-        if self.round<=self.stop_round:
+        if self.round<self.stop_round:
             self.results += self.get_award_round()
             self.round += 1
-            round_label.set(self.round)
+            round_label.set(str(game.round)+"/16")
             results_label.set(self.results)
             awards_label.set(self.get_award_round())
         else:
             round_label.set(0)
             results_label.set("Lose!")
             awards_label.set(0)
-            results_machine_label.set(np.sum(self.awards[0:self.get_machine_award()]))
+            results_machine_label.set(np.sum(self.awards[0:self.get_machine_round()])) if self.get_machine_round()<self.stop_round else results_machine_label.set("Machine Lost")
 
-    def get_machine_award(self):
+    def get_machine_round(self):
         clp = pickle.load(open(r'C:\\Users\\juanb\\PycharmProjects\\GameLearning\\clp.pickle', 'rb'))
         predicted = clp.predict(self.awards.reshape(1,-1))
         round_stop_machine = int(round(predicted[0]))
         return round_stop_machine
 
     def stop_game(self):
-        results_machine_label.set(np.sum(self.awards[0:self.get_machine_award()]))
+        if self.get_machine_round()<self.stop_round:
+            results_machine_label.set(np.sum(self.awards[0:self.get_machine_round()]))
+        else:
+            results_machine_label.set("Machine Lose")
 
 
 def get_awards():
@@ -83,14 +86,13 @@ if __name__ == "__main__":
     root = Tk()
     root.title("Feet to Meters")
 
-    round_label = IntVar()
+    round_label = StringVar()
     awards_label = StringVar()
     results_label = StringVar()
     results_machine_label = StringVar()
-
     results_label.set(game.results)
     awards_label.set(game.get_award_round())
-    round_label.set(game.round)
+    round_label.set(str(game.round)+"/16")
 
     Button(command=game.next_round,text="Next Round").grid(row=1)
     Button(command=game.stop_game,text="Stop Game").grid(row=1,column=1)
