@@ -1,7 +1,13 @@
 import pickle
 import numpy as np
 from tkinter import *
+import os
 
+dir_path = os.path.dirname(os.path.realpath(__file__))
+windows_path_samples = os.path.dirname(os.path.realpath(__file__))+'\\myfile.json'
+unix_path_samples = os.path.dirname(os.path.realpath(__file__))+'/myfile.json'
+windows_path_model = os.path.dirname(os.path.realpath(__file__))+'\\clp.pickle'
+unix_path_model = os.path.dirname(os.path.realpath(__file__))+'/clp.pickle'
 
 class GameRound():
     def __init__(self):
@@ -31,7 +37,8 @@ class GameRound():
             results_machine_label.set(np.sum(self.awards[0:self.get_machine_round()])) if self.get_machine_round()<self.stop_round else results_machine_label.set("Machine Lost")
 
     def get_machine_round(self):
-        clp = pickle.load(open(r'C:\\Users\\juanb\\PycharmProjects\\GameLearning\\clp.pickle', 'rb'))
+        clp = pickle.load(open(windows_path_model, 'rb') if os.name == 'nt' else  open(
+        unix_path_model, 'rb'))
         predicted = clp.predict(self.awards.reshape(1,-1))
         round_stop_machine = int(round(predicted[0]))
         return round_stop_machine
@@ -58,8 +65,9 @@ class GameRound():
         self.awards = get_awards()
         self.stop_round = get_stop_round()
         self.results = 0
-        self.final_award = np.sum(self.awards)
+        self.final_award = np.sum(self.awards[0:16])
         self.set_variables_label()
+        final_award_label.set(self.final_award)
         results_machine_label.set(0)
         max_result_label.set(0)
 

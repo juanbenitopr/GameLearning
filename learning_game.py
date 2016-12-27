@@ -5,13 +5,15 @@ from sklearn.svm.classes import SVR
 import os
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-windows_path = os.path.dirname(os.path.realpath(__file__))+'\\myfile.json'
-unix_path = os.path.dirname(os.path.realpath(__file__))+'/myfile.json'
+windows_path_samples = os.path.dirname(os.path.realpath(__file__))+'\\myfile.json'
+unix_path_samples = os.path.dirname(os.path.realpath(__file__))+'/myfile.json'
+windows_path_model = os.path.dirname(os.path.realpath(__file__))+'\\clp.pickle'
+unix_path_model = os.path.dirname(os.path.realpath(__file__))+'/clp.pickle'
 
 def load_model():
     # Save training samples to json file
-    file = open(windows_path, 'r') if os.name == 'nt' else  open(
-        unix_path, 'r')
+    file = open(windows_path_samples, 'r') if os.name == 'nt' else  open(
+        unix_path_samples, 'r')
     datas = json.load(file)
     # Create model object to train and predict new values
     # You can try to change this estimator and look what is the difference.
@@ -26,4 +28,5 @@ if __name__=="__main__":
     X,Y,clp = load_model()
     clp.fit(X,Y)
     # Save our trained estimator into pickle file, to recover later.
-    pickle.dump(clp,open('C:\\Users\\juanb\\PycharmProjects\\GameLearning\\clp.pickle', 'wb'))
+    pickle.dump(clp,open(windows_path_model, 'wb') if os.name == 'nt' else  open(
+        unix_path_model, 'wb'))
