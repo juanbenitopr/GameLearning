@@ -15,6 +15,7 @@ You have tree modules:
 3. learning_game
 
 Intructions: 
+
 1. I provide a training samples, it is called myfile.json and one scikit_model packaged into pickle file.
 2. You have to install the requirements.txt, it will be installed by the next command: pip install -r path/to/requirements.txt
 3. Then you can run the_big_game, and check the results displayed from command promt.
