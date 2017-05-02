@@ -28,7 +28,7 @@ class GameRound():
             self.set_variables_label()
         else:
             round_label.set(0)
-            results_label.set("Lose!")
+            results_label.set("You Lose!")
             awards_label.set(0)
             max_result_label.set(self.get_max_result())
             self.disabled_button()
@@ -93,7 +93,7 @@ class GameRound():
 
     def is_stop_round(self, n_round):
         per_rounds = TOTAL_ROUNDS-n_round
-        round_choosen = int(np.random.random_sample()*15+1)
+        round_choosen = np.random.randint(1,per_rounds)+1
         return round_choosen == per_rounds
 
 def get_awards():
