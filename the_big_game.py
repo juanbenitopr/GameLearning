@@ -3,17 +3,15 @@ import numpy as np
 from tkinter import *
 import os
 
-dir_path = os.path.dirname(os.path.realpath(__file__))
-windows_path_samples = os.path.dirname(os.path.realpath(__file__))+'\\myfile.json'
-unix_path_samples = os.path.dirname(os.path.realpath(__file__))+'/myfile.json'
-windows_path_model = os.path.dirname(os.path.realpath(__file__))+'\\clp.pickle'
-unix_path_model = os.path.dirname(os.path.realpath(__file__))+'/clp.pickle'
+from learning_game import windows_path_model, unix_path_model
+
+TOTAL_ROUNDS = 16
 
 class GameRound():
     def __init__(self):
         self.round = 0
         self.awards = get_awards()
-        self.stop_round = get_stop_round()
+        self.stop_round = self.get_stop_round()
         self.results =0
         self.final_award = np.sum(self.awards[0:16])
 
@@ -46,8 +44,9 @@ class GameRound():
     def stop_game(self):
         max_result_label.set(self.get_max_result())
         self.disabled_button()
-        if self.get_machine_round()<self.stop_round:
-            results_machine_label.set(np.sum(self.awards[0:self.get_machine_round()]))
+        machine_round = self.get_machine_round()
+        if machine_round <self.stop_round:
+            results_machine_label.set(np.sum(self.awards[0:machine_round]))
         else:
             results_machine_label.set("Machine Lose")
 
@@ -63,7 +62,7 @@ class GameRound():
         stop_button.config(state='normal')
         self.round = 0
         self.awards = get_awards()
-        self.stop_round = get_stop_round()
+        self.stop_round = self.get_stop_round()
         self.results = 0
         self.final_award = np.sum(self.awards[0:16])
         self.set_variables_label()
@@ -80,6 +79,22 @@ class GameRound():
         results_label.set(self.results)
         awards_label.set(self.get_award_round())
 
+    def get_stop_round(self):
+        range_total_rounds = range(TOTAL_ROUNDS)
+        for n in range_total_rounds:
+            is_stop = self.is_stop_round(n)
+            if n == len(range_total_rounds)-1:
+                stop = n
+                break
+            if is_stop:
+                stop = n
+                break
+        return stop
+
+    def is_stop_round(self, n_round):
+        per_rounds = TOTAL_ROUNDS-n_round
+        round_choosen = int(np.random.random_sample()*15+1)
+        return round_choosen == per_rounds
 
 def get_awards():
     award = 20+30*np.random.random_sample(16)
@@ -87,9 +102,6 @@ def get_awards():
     final_award = np.concatenate((award, np.array([np_sum])))
     return final_award
 
-def get_stop_round():
-    stop = int(np.random.random_sample() * 15 + 1)
-    return stop
 
 
 def start_variables_gui():

@@ -2,9 +2,10 @@ import json
 import numpy as np
 import os
 
+file_name = 'games_for_learning.json'
 dir_path = os.path.dirname(os.path.realpath(__file__))
-windows_path = os.path.dirname(os.path.realpath(__file__))+'\\myfile.json'
-unix_path = os.path.dirname(os.path.realpath(__file__))+'/myfile.json'
+windows_path = os.path.dirname(os.path.realpath(__file__))+'\\%s'%file_name
+unix_path = os.path.dirname(os.path.realpath(__file__))+'/%s'%file_name
 
 def get_awards():
     # This Game always have 16 round
@@ -28,8 +29,6 @@ if __name__ == "__main__":
         Y[count]=get_best_choice()
         count+=1
     datas = {'X':award.tolist(),'Y':Y.tolist()}
-
-
     file = open(windows_path, 'w') if os.name == 'nt' else  open(
         unix_path, 'w')
     load = json.dumps(datas)
